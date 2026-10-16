@@ -4,7 +4,7 @@ Automatic CPU thread optimization for Dota 2 using Windows CPU Sets.
 
 Created by Sam Main (Autisto.).
 
-## Download
+## Download + My scan example
 
 [Download latest release v1.6](https://github.com/Autisto-main/Dota2-Universal-CPU-Sets/releases/tag/v1.6)
 
