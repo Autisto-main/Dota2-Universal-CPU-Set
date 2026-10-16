@@ -100,7 +100,6 @@ The log records CPU detection, thread selection, changes and errors.
 - It does not download additional software or require a network connection.
 - Avoid running multiple CPU scheduling tools that modify the same Dota 2 threads.
 - Performance results depend on CPU architecture, Windows scheduling and game workload.
-- The universal version has not yet been validated across different hardware configurations.
 
 ## Security
 
