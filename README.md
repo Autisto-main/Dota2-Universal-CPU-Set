@@ -1,68 +1,119 @@
-Dota 2 Universal CPU Sets v1.6
-================================
-Requirements: Windows 10/11, Windows PowerShell 5.1.
+# Dota 2 Universal CPU Sets v1.6
 
-WHAT IT DOES
-- Detects Windows CPU Sets and available efficiency classes after Dota starts.
-- Includes parked CPU Sets in the selection because parking is temporary.
-- Excludes CPU Sets flagged as exclusively allocated.
-- Makes no changes when only one efficiency class is detected.
-- Measures CPU time for each Dota 2 thread over 12 seconds.
-- Selects the busiest thread only if it used at least 2.4 seconds of CPU
-  time and exceeded the second-busiest thread by at least 25%.
-- Leaves any existing thread-level CPU Sets unchanged.
-- Writes decisions and errors to:
-  %LOCALAPPDATA%\DotaUniversalCpuSets\DotaCpuSets.log
+Automatic CPU thread optimization for Dota 2 using Windows CPU Sets.
 
-IMPORTANT
-The busiest thread is not necessarily Dota 2's main or render thread.
-Identifying faster CPU cores does not guarantee an FPS improvement.
-CPU Sets are scheduling preferences, not strict CPU affinity.
-This script has not been tested with Windows and Dota 2 in a live session.
+Created by Sam Main (Autisto.).
 
-INSTALL
-1. Extract the ZIP into a folder.
-2. Open Windows PowerShell 5.1 in that folder.
-3. Run:
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\DotaCpuSets.ps1 -Mode Install
-4. Launch Dota 2 and play a live match while the script samples threads.
-   After Dota is detected, it waits 20 seconds before detecting CPU classes.
+## Download
 
-Installation creates a Windows Task Scheduler task for your current user.
-The task starts at sign-in, watches for Dota 2 and works automatically.
-CPU class detection does not run at sign-in; it runs after Dota starts.
-You do not need to activate it manually each time you launch the game.
+[Download latest release v1.6](https://github.com/Autisto-main/Dota2-Universal-CPU-Sets/releases/tag/v1.6)
 
-CHECK STATUS
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\DotaCpuSets.ps1 -Mode Status
+[VirusTotal Security Scan](https://www.virustotal.com/gui/file/00e99d6465458fa159c0115740c376aa63047dfcf95237533e987ffb74da4ef2)
 
-TEMPORARILY DISABLE
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\DotaCpuSets.ps1 -Mode Disable
+## Requirements
 
-RE-ENABLE
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\DotaCpuSets.ps1 -Mode Enable
+- Windows 10 or Windows 11
+- Windows PowerShell 5.1
+- Dota 2 installed through Steam
 
-UNINSTALL
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\DotaCpuSets.ps1 -Mode Uninstall
+## What It Does
 
-After disabling or uninstalling, fully close and restart Dota 2 to make
-sure its thread-level CPU Set selection has been cleared.
-Logs and copied script files remain in:
-%LOCALAPPDATA%\DotaUniversalCpuSets
-You can delete that folder after uninstalling.
+- Automatically detects Dota 2 when it starts.
+- Waits 20 seconds before detecting CPU efficiency classes.
+- Detects available Windows CPU Sets and faster CPU cores.
+- Includes parked CPU cores because parking is temporary.
+- Excludes CPU Sets marked as exclusively allocated.
+- Measures CPU usage per Dota 2 thread over 12 seconds.
+- Selects the busiest thread when it meets the configured thresholds.
+- Assigns that thread to the fastest available CPU efficiency class.
+- Leaves existing thread-level CPU Set assignments unchanged.
+- Automatically operates through Windows Task Scheduler.
+- Records actions and errors in a log file.
 
-SAFETY AND COMPATIBILITY
-- The script does not request administrator privileges; Windows may deny
-  access to some threads or scheduled-task operations.
-- Avoid running this alongside other Dota 2 CPU-affinity or CPU-Set tools.
-- Installation does not search for or modify other users' tuning tasks.
-- No network requests, BIOS changes or GPU settings changes are made.
-- Review the PowerShell source before running it.
+The script changes scheduling preferences for one Dota 2 thread. It does not change process-wide CPU affinity.
 
-LICENSE
-This project is released under GNU GPL version 3 only (GPL-3.0-only).
-Copyright (C) 2026 Sam Main (Autisto.). See LICENCE approved from Sam Main (Autisto.).txt for the complete terms.
-You may use, modify, and redistribute the software under GPLv3.
-If you distribute modifications, keep applicable copyright notices,
-mark your changes, and provide the corresponding source code.
-No warranty or performance guarantee is provided.
+## CPU Compatibility
+
+Intel processors with P-cores and E-cores are the primary target.
+
+The script automatically detects the available CPU topology rather than assuming a fixed number of cores.
+
+AMD processors and Intel processors with only one reported CPU efficiency class can run the script, but no CPU Set optimization will be applied.
+
+## Installation
+
+1. Download the ZIP from the latest GitHub release.
+2. Extract the ZIP into a folder.
+3. Open Windows PowerShell 5.1 in that folder.
+4. Run:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\DotaCpuSets.ps1 -Mode Install
+```
+
+5. Start Dota 2 normally through Steam.
+
+After installation, Windows Task Scheduler starts the optimization automatically. You do not need to run PowerShell manually every time you play.
+
+## Check Status
+
+```powershell
+.\DotaCpuSets.ps1 -Mode Status
+```
+
+## Temporarily Disable
+
+```powershell
+.\DotaCpuSets.ps1 -Mode Disable
+```
+
+## Enable Again
+
+```powershell
+.\DotaCpuSets.ps1 -Mode Enable
+```
+
+## Uninstall
+
+```powershell
+.\DotaCpuSets.ps1 -Mode Uninstall
+```
+
+Restart Dota 2 after disabling or uninstalling to ensure a clean comparison.
+
+## Logging
+
+The script stores its log at:
+
+```text
+%LOCALAPPDATA%\DotaUniversalCpuSets\DotaCpuSets.log
+```
+
+The log records CPU detection, thread selection, changes and errors.
+
+## Important Information
+
+- CPU Sets are scheduling preferences, not strict CPU affinity.
+- The busiest thread is not guaranteed to be Dota 2's main or render thread.
+- The script does not require core parking to be disabled.
+- It does not modify Dota 2 files, BIOS settings or GPU settings.
+- It does not download additional software or require a network connection.
+- Avoid running multiple CPU scheduling tools that modify the same Dota 2 threads.
+- Performance results depend on CPU architecture, Windows scheduling and game workload.
+- The universal version has not yet been validated across different hardware configurations.
+
+## Security
+
+The full PowerShell source code is publicly available in this repository.
+
+You can inspect `DotaCpuSets.ps1` before running it.
+
+The VirusTotal report linked above corresponds to the v1.6 release ZIP. Antivirus scan results do not guarantee that software is completely safe.
+
+## License
+
+GNU General Public License v3.0.
+
+Copyright (C) 2026 Sam Main (Autisto.).
+
+See the LICENSE file for the full terms.
